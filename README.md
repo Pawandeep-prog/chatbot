@@ -1,6 +1,7 @@
 # chatbot
 chatbot coded in videos part wise
 
-videos : https://youtu.be/DItR-l59i6M
+watch full tutorial video
+videos : https://youtu.be/CSpsB4_-5WQ
 
 kaggle  : https://www.kaggle.com/programminghut/seq2seq-chatbot-keras
