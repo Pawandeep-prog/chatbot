@@ -1,12 +1,12 @@
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Embedding, LSTM, Input
-
+from keras.models import Model
+from keras.layers import Dense, Embedding, LSTM, Input
+import prepr
 
 enc_inp = Input(shape=(13, ))
 dec_inp = Input(shape=(13, ))
 
 
-VOCAB_SIZE = len(vocab)
+VOCAB_SIZE = len(prepr.vocab)
 embed = Embedding(VOCAB_SIZE+1, output_dim=50, 
                   input_length=13,
                   trainable=True                  
@@ -35,4 +35,4 @@ model = Model([enc_inp, dec_inp], dense_op)
 
 model.compile(loss='categorical_crossentropy',metrics=['acc'],optimizer='adam')
 
-model.fit([encoder_inp, decoder_inp],decoder_final_output,epochs=4)
+model.fit([prepr.encoder_inp, prepr.decoder_inp],prepr.decoder_final_output,epochs=10)

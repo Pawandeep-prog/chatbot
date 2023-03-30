@@ -1,10 +1,11 @@
 import re
+from keras_preprocessing.sequence import pad_sequences
 
 
-lines = open('../input/chatbot-data/cornell movie-dialogs corpus/movie_lines.txt', encoding='utf-8',
+lines = open('movie_lines.txt', encoding='utf-8',
              errors='ignore').read().split('\n')
 
-convers = open('../input/chatbot-data/cornell movie-dialogs corpus/movie_conversations.txt', encoding='utf-8',
+convers = open('movie_conversations.txt', encoding='utf-8',
              errors='ignore').read().split('\n')
 
 
@@ -190,7 +191,7 @@ del(clean_ans, clean_ques, line, lst, word)
 
 
 
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+from keras_preprocessing.sequence import pad_sequences
 encoder_inp = pad_sequences(encoder_inp, 13, padding='post', truncating='post')
 decoder_inp = pad_sequences(decoder_inp, 13, padding='post', truncating='post')
 
@@ -206,5 +207,9 @@ decoder_final_output = pad_sequences(decoder_final_output, 13, padding='post', t
 
 del(i)
 
-from tensorflow.keras.utils import to_categorical
+from keras.utils import to_categorical
 decoder_final_output = to_categorical(decoder_final_output, len(vocab))
+
+
+
+print(decoder_final_output.shape)

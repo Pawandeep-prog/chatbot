@@ -1,8 +1,11 @@
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input
+from keras.models import Model
+from keras.layers import Input
+import numpy as np
+import model
+import prepr
 
 
-enc_model = Model([enc_inp], enc_states)
+enc_model = Model([model.enc_inp], model.enc_states)
 
 
 
@@ -13,20 +16,19 @@ decoder_state_input_c = Input(shape=(400,))
 decoder_states_inputs = [decoder_state_input_h, decoder_state_input_c]
 
 
-decoder_outputs, state_h, state_c = dec_lstm(dec_embed , 
+decoder_outputs, state_h, state_c = model.dec_lstm(model.dec_embed , 
                                     initial_state=decoder_states_inputs)
 
 
 decoder_states = [state_h, state_c]
 
 
-dec_model = Model([dec_inp]+ decoder_states_inputs,
+dec_model = Model([model.dec_inp]+ decoder_states_inputs,
                                       [decoder_outputs]+ decoder_states)
 
 
 
-
-from keras.preprocessing.sequence import pad_sequences
+from keras_preprocessing.sequence import pad_sequences
 print("##########################################")
 print("#       start chatting ver. 1.0          #")
 print("##########################################")
@@ -37,7 +39,7 @@ while prepro1 != 'q':
     prepro1  = input("you : ")
     ## prepro1 = "Hello"
 
-    prepro1 = clean_text(prepro1)
+    prepro1 = prepr.clean_text(prepro1)
     ## prepro1 = "hello"
 
     prepro = [prepro1]
@@ -50,10 +52,10 @@ while prepro1 != 'q':
         for y in x.split():
             ## y = "hello"
             try:
-                lst.append(vocab[y])
+                lst.append(prepr.vocab[y])
                 ## vocab['hello'] = 454
             except:
-                lst.append(vocab['<OUT>'])
+                lst.append(prepr.vocab['<OUT>'])
         txt.append(lst)
 
     ## txt = [[454]]
@@ -67,7 +69,7 @@ while prepro1 != 'q':
      ##   empty_target_seq = [0]
 
 
-    empty_target_seq[0, 0] = vocab['<SOS>']
+    empty_target_seq[0, 0] = prepr.vocab['<SOS>']
     ##    empty_target_seq = [255]
 
     stop_condition = False
@@ -76,13 +78,13 @@ while prepro1 != 'q':
     while not stop_condition :
 
         dec_outputs , h, c= dec_model.predict([ empty_target_seq] + stat )
-        decoder_concat_input = dense(dec_outputs)
+        decoder_concat_input = model.dense(dec_outputs)
         ## decoder_concat_input = [0.1, 0.2, .4, .0, ...............]
 
         sampled_word_index = np.argmax( decoder_concat_input[0, -1, :] )
         ## sampled_word_index = [2]
 
-        sampled_word = inv_vocab[sampled_word_index] + ' '
+        sampled_word = prepr.inv_vocab[sampled_word_index] + ' '
 
         ## inv_vocab[2] = 'hi'
         ## sampled_word = 'hi '
@@ -101,9 +103,6 @@ while prepro1 != 'q':
 
     print("chatbot attention : ", decoded_translation )
     print("==============================================")  
-
-
-
 
 
 
